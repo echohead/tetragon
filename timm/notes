@@ -1,0 +1,41 @@
+
+# BTF
+
+Try to get vmlinux from dbg package:
+
+```
+apt download linux-image-4.14.171-5
+ar x linux-image-4.14.171-5_4.14.171-5-6_amd64.deb
+tar xvf data.tar.xz
+```
+
+(package doesn't contain vmlinux)
+
+```
+/tmp/extract-vmlinux /mnt/host-root/boot/vmlinuz-4.14.171-5 > vmlinux
+apt-get install -y dwarves
+pahole -J vmlinux
+```
+
+(the vmlinuz doesn't have debugging info, so pahole fails)
+
+# tracee
+
+doesn't support 4.14.171.
+
+```
+./pkg/ebpf/c/tracee.bpf.c:387:2: error: Minimal required kernel version is 4.18
+#error Minimal required kernel version is 4.18 
+```
+
+
+# btf file
+
+in debug container:
+
+```
+apt-get install -y linux-image-4.14.171-5-dbg
+apt-get install -y dwarves llvm
+pahole -J /usr/lib/debug/vmlinux-4.14.171-5
+bpftool btf dump file /usr/lib/debug/vmlinux-4.14.171-5 format c > vmlinux.h
+```

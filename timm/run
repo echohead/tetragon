@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eux
+
+host=$1
+
+ssh -t $host 'cd /tmp/timm && sudo LD_LIBRARY_PATH=$(realpath ./lib) ./tetragon --bpf-lib bpf/objs --export-filename /tmp/out'

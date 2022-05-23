@@ -1,0 +1,12 @@
+#!/bin/bash
+set -eux
+
+host=$1
+dir="/tmp/timm"
+
+ssh $host rm -rf $dir
+ssh $host mkdir -p $dir/bpf
+
+scp -r tetragon $host:$dir/.
+scp -r bpf/objs $host:$dir/bpf/.
+scp -r lib $host:/tmp/timm/.
